@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/home/akesling/.vim/bundle/snipmate.vim'
+let g:netrw_dirhist_2='/home/akesling/Devel/github/echoet/go-tools/.git'
+let g:netrw_dirhist_3='/home/akesling/Devel/mozilla/chromeless/build/My First Browser.xul'
+let g:netrw_dirhist_4='/home/akesling/Devel/calibre/calibre/recipes'
+let g:netrw_dirhist_5='/tmp/foo/home/akesling/rpmbuild/SOURCES'
+let g:netrw_dirhist_6='/tmp/foo/home/akesling/rpmbuild/SPECS'
+let g:netrw_dirhist_7='/home/akesling/Devel/github/echoet/Artemis/.git'
+let g:netrw_dirhist_8='/home/akesling/Devel/github/echoet/diaspora/lib/postzord'
+let g:netrw_dirhist_9='/home/akesling/.vim'
