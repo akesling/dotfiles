@@ -155,8 +155,8 @@ endif
 if &t_Co > 2 || has("gui_running")
     syntax enable
     set background=dark
-    colorscheme solarized
     let g:solarized_termtrans=1
+    colorscheme solarized
 "    let g:solarized_italic=1
 "    let g:solarized_bold=1
 "    let g:solarized_underline=1
