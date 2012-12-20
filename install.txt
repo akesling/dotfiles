@@ -1,0 +1,3 @@
+vim-enhanced
+vim-nerdtree
+vim-latex
