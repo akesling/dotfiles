@@ -1,3 +1,6 @@
 vim-enhanced
 vim-nerdtree
 vim-latex
+htop
+iftop
+ipython
