@@ -4,3 +4,7 @@ vim-latex
 htop
 iftop
 ipython
+telnet
+socat
+tmux
+screen
