@@ -8,3 +8,4 @@ telnet
 socat
 tmux
 screen
+links

@@ -104,6 +104,8 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 nnoremap j gj
 nnoremap k gk
 
+" Because IMAP steals <C-j> if we don't bind it ahead
+map <C-space> <Plug>IMAP_JumpForward
 
 " Easy window navigation
 map <C-h> <C-w>h
