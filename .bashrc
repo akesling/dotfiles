@@ -17,6 +17,8 @@ then
 #    export TERM=xterm-256color
     eval `dircolors ~/.dircolors`
 fi
+# Fix tmux color issues (force 256 colors)
+alias tmux='tmux -2'
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 

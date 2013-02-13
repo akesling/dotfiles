@@ -19,6 +19,13 @@ set wildmode=full
 set wildmenu
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""" Latex """"""""""""""""""""""""""""""""""""""""""""""
+
+let g:Tex_ViewRule_pdf='evince'
+let g:Tex_DefaultTargetFormat='pdf'
+let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""" Tabs """""""""""""""""""""""""""""""""""""""""""""""
 
 nmap <silent> <leader>n :tabnew<CR>
