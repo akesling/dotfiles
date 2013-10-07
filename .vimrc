@@ -62,63 +62,11 @@ set listchars=tab:»·,trail:·,extends:#,nbsp:·  " Show me tabs and trailing
 
 set ruler       " show the cursor position all the time
 
-let &colorcolumn=join(range(81,999),",")  " Help with line-length visualization.
+set wildmode=list:longest,full
+set wildmenu
 
-" Don't wake up system with blinking cursor:
-" http://www.linuxpowertop.org/known.php
-let &guicursor = &guicursor . ",a:blinkon0"
-
-" Switch syntax highlighting on, when the terminal has colors
-" Also switch on highlighting the last used search pattern.
-if &t_Co > 2 || has("gui_running")
-    syntax enable
-    set background=dark
-    let g:solarized_termtrans=1
-    colorscheme solarized
-"    let g:solarized_italic=1
-"    let g:solarized_bold=1
-"    let g:solarized_underline=1
-    set hlsearch
-endif
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Core Remappings """"""""""""""""""""""""""""""""""""
-
-" Give an alternative for having to stretch for ESC. Suggestion by Val Markovic.
-inoremap jk <Esc>
-
-" Thank you Val Markovic for pointing out I wasn't doing this in visual mode
-" In normal mode, we use : much more often than ; so lets swap them.
-" WARNING: this will cause any "ordinary" map command without the "nore" prefix
-" that uses ":" to fail. For instance, "map <f2> :w" would fail, since vim will
-" read ":w" as ";w" because of the below remappings. Use "noremap"s in such
-" situations and you'll be fine.
-nnoremap ; :
-"nnoremap : ;
-vnoremap ; :
-vnoremap : ;
-
-" Make moving cursor not jump between newline-delimited lines, but instead do
-" so for visual lines
-nnoremap j gj
-nnoremap k gk
-
-" Because IMAP steals <C-j> if we don't bind it ahead
-map <C-space> <Plug>IMAP_JumpForward
-
-" Easy window navigation
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
-
-nmap <silent> <leader>/ :nohlsearch<CR>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
+set formatoptions+=j
+let &colorcolumn=join(range(81,999),",")
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""" Latex """"""""""""""""""""""""""""""""""""""""""""""
