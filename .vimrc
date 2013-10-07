@@ -15,8 +15,11 @@ set ruler       " show the cursor position all the time
 set ignorecase
 " filetype plugin indent on
 
-set wildmode=full
+set wildmode=list:longest,full
 set wildmenu
+
+set formatoptions+=j
+let &colorcolumn=join(range(81,999),",")
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""" Latex """"""""""""""""""""""""""""""""""""""""""""""
