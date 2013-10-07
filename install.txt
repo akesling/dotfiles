@@ -9,3 +9,4 @@ socat
 tmux
 screen
 links
+xclip
