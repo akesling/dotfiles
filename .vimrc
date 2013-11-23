@@ -119,9 +119,12 @@ nmap <silent> <leader>/ :nohlsearch<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""" Latex """"""""""""""""""""""""""""""""""""""""""""""
 
+let g:Tex_FormatDependency_pdf='dvi,pdf'
+let g:Tex_CompileRule_pdf = 'dvipdf $*.dvi'
+
 let g:Tex_ViewRule_pdf='evince'
 let g:Tex_DefaultTargetFormat='pdf'
-let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
+"let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -154,6 +157,13 @@ set smartindent
 
 nmap <silent> <leader>h :NERDTreeToggle<CR>
 nnoremap <F4> :NERDTreeToggle<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""" Syntastic """"""""""""""""""""""""""""""""""""""""""
+
+let g:syntastic_cpp_compiler_options = ' -std=c++11'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
