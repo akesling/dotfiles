@@ -52,7 +52,11 @@ export PATH=$HOME/local/node/bin:$PATH
 #Fix for fucked up flash/glibc issue
 alias firefox="LD_PRELOAD=$HOME/Devel/linusmemcpy/linusmemcpy.so firefox"
 alias huludesktop="LD_PRELOAD=$HOME/Devel/linusmemcpy/linusmemcpy.so huludesktop"
-#alias google-chrome="LD_PRELOAD=$HOME/Devel/linusmemcpy/linusmemcpy.so; google-chrome"
+alias google-chrome="export LD_PRELOAD=$HOME/Devel/linusmemcpy/linusmemcpy.so; google-chrome"
+
+alias spotify="wine ~/.wine/drive_c/Program\ Files/Spotify/spotify.exe"
 
 #calendar with today highlighted - http://www.shell-fu.org/lister.php?id=210
 alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#/g'\'') /"'
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
