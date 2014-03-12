@@ -8,10 +8,27 @@
 " Change the mapleader from \ to , #Note that this needs to be before everything
 let mapleader=","
 
-" Use pathogen to easily modify the runtime path to include all
-" plugins under the ~/.vim/bundle directory
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""" Local Configurations """""""""""""""""""""""""""""""
+source ~/.local/dotfiles/vimrc
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""" Vundle """""""""""""""""""""""""""""""""""""""""""""
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundle, required
+Bundle 'akesling/ondemandhighlight'
+Bundle 'gmarik/vundle'
+Bundle 'scrooloose/syntastic'
+Bundle 'altercation/vim-colors-solarized'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -229,12 +246,5 @@ if &term=="xterm"
     set t_Sb=^[[4%dm
     set t_Sf=^[[3%dm
 endif
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Local Configurations """""""""""""""""""""""""""""""
-source ~/.local/dotfiles/vimrc
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
