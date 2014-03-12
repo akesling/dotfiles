@@ -35,5 +35,3 @@ alias pip='pip-python'
 
 #calendar with today highlighted - http://www.shell-fu.org/lister.php?id=210
 alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#/g'\'') /"'
-
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

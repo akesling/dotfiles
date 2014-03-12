@@ -59,8 +59,6 @@ set listchars=tab:»·,trail:·,extends:#,nbsp:·  " Show me tabs and trailing
 
 set ruler       " show the cursor position all the time
 
-set wildmode=list:longest,full
-set wildmenu
 let &colorcolumn=join(range(81,999),",")  " Help with line-length visualization.
 
 " Don't wake up system with blinking cursor:
@@ -238,4 +236,5 @@ endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""" Local Configurations """""""""""""""""""""""""""""""
 source ~/.local/dotfiles/vimrc
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
