@@ -56,7 +56,7 @@
                 <p>
                     You know that Vim lets you undo changes like any text editor. What you might
                     not know is that it doesn't just keep a list of your changes &mdash; it keeps
-                    a goddamed <a href="http://vim.wikia.com/wiki/Using_undo_branches">tree</a> of them.
+                    a <a href="http://vim.wikia.com/wiki/Using_undo_branches">tree</a> of them.
                 </p>
 
                 <p>
@@ -98,6 +98,9 @@
                             <li><a href="#gundo_disable">g:gundo_disable</a></li>
                             <li><a href="#gundo_map_move">g:gundo_map_move_[older/newer]</a></li>
                             <li><a href="#gundo_close_on_revert">g:gundo_close_on_revert</a></li>
+                            <li><a href="#gundo_statusline">g:gundo_[preview/tree]_statusline</a></li>
+                            <li><a href="#gundo_auto_preview">g:gundo_auto_preview</a></li>
+                            <li><a href="#gundo_playback_delay">g:gundo_playback_delay</a></li>
                         </ul>
                     </li>
                     <li><a href="#license">License</a></li>
@@ -326,6 +329,36 @@ let g:gundo_right = 1
                 <p>Set this to 1 to automatically close the Gundo windows when reverting.</p>
 
                 <p>Default: 0 (windows do not automatically close)</p>
+
+                <a name="gundo_statusline"></a>
+                <h2>g:gundo_[preview/tree]_statusline</h2>
+
+                <p>
+                    Set this to 0 to disable automatically rendering preview diffs as you move
+                    through the undo tree (you can still render a specific diff with r).  This can
+                    be useful on large files and undo trees to speed up Gundo.
+                </p>
+
+                <p>Default: unset (windows use the default statusline)</p>
+
+
+                <a name="#gundo_auto_preview"></a>
+                <h2>g:gundo_auto_preview</h2>
+
+                <p>Set this to 1 to rendering diff automatically with cursor move.</p>
+
+                <p>Default: 1 (auto preview diff)</p>
+
+                <a name="#gundo_playback_delay"></a>
+                <h2>g:gundo_playback_delay</h2>
+
+                <p>
+                    This is the delay in milliseconds between each change when running 'play to'
+                    mode. Set this to a higher number for a slower playback or to a lower number
+                    for a faster playback.
+                </p>
+
+                <p>Default: 60</p>
             </section>
             <section>
                 <a name="license"></a>
@@ -367,10 +400,57 @@ let g:gundo_right = 1
                 <h1>Changelog</h1>
 
                 <ol class="changelog">
+                    <li>v2.5.0
+                        <ul>
+                            <li>
+                                Fix the help window to take custom mappings into account.
+                            </li>
+                            <li>
+                                Add <code>g:gundo_playback_delay</code> option.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>v2.4.0
+                        <ul>
+                            <li>
+                                Add auto preview option.
+                            </li>
+                            <li>
+                                Add 'r' mapping to preview current state.
+                            </li>
+                            <li>
+                                Add public <code>gundo#GundoShow()</code> and <code>gundo#GundoHide()</code> functions.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>v2.3.0
+                        <ul>
+                            <li>
+                                Add statusline configuration.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>v2.2.2
+                        <ul>
+                            <li>
+                                More performance improvements.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>v2.2.1
+                        <ul>
+                            <li>
+                                Refactoring and performance improvements.
+                            </li>
+                        </ul>
+                    </li>
                     <li>v2.2.0
                         <ul>
                             <li>
                                 Add the <code>g:gundo_close_on_revert</code> setting.
+                            </li>
+                            <li>
+                                Fix a bug with the <code>splitbelow</code> setting.
                             </li>
                         </ul>
                     </li>
@@ -447,5 +527,18 @@ let g:gundo_right = 1
                 with a lot of help from others.
             </footer>
         </div>
+        <script type="text/javascript">
+            var _gauges = _gauges || [];
+            (function() {
+             var t   = document.createElement('script');
+             t.type  = 'text/javascript';
+             t.async = true;
+             t.id    = 'gauges-tracker';
+             t.setAttribute('data-site-id', '4f843f8c613f5d65280000e6');
+             t.src = '//secure.gaug.es/track.js';
+             var s = document.getElementsByTagName('script')[0];
+             s.parentNode.insertBefore(t, s);
+             })();
+         </script>
     </body>
 </html>

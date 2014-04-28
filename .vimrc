@@ -29,6 +29,8 @@ Bundle 'akesling/ondemandhighlight'
 Bundle 'gmarik/vundle'
 Bundle 'scrooloose/syntastic'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'sjl/gundo.vim'
+Bundle 'tpope/vim-unimpaired'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
