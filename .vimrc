@@ -6,14 +6,7 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""" HEADER """""""""""""""""""""""""""""""""""""""""""""
 " Change the mapleader from \ to , #Note that this needs to be before everything
-let mapleader=","
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Local Configurations """""""""""""""""""""""""""""""
-source ~/.local/dotfiles/vimrc
+let mapleader=","               " Make life easier.
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -21,17 +14,31 @@ source ~/.local/dotfiles/vimrc
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""" Vundle """""""""""""""""""""""""""""""""""""""""""""
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
 
 " let Vundle manage Vundle, required
-Bundle 'akesling/ondemandhighlight'
-Bundle 'gmarik/vundle'
-Bundle 'scrooloose/syntastic'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'sjl/gundo.vim'
-Bundle 'tpope/vim-unimpaired'
+Plugin 'gmarik/Vundle.vim'
 
+" Visual
+Plugin 'akesling/ondemandhighlight'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'bling/vim-airline'
+Plugin 'seebi/dircolors-solarized'
+
+" Movement extension
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'tpope/vim-unimpaired'
+
+" Code interactions
+Plugin 'nsf/gocode', {'rtp': 'vim/'}
+Plugin 'scrooloose/syntastic'
+
+" Full-on Plugins
+Plugin 'scrooloose/nerdtree'
+Plugin 'sjl/gundo.vim'
+
+call vundle#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
@@ -180,10 +187,19 @@ nnoremap <F4> :NERDTreeToggle<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""" Syntastic """"""""""""""""""""""""""""""""""""""""""
 
 let g:syntastic_cpp_compiler_options = ' -std=c++11'
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""" Air-Line """""""""""""""""""""""""""""""""""""""""""
+
+AirlineTheme dark
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -211,7 +227,7 @@ set viminfo='20,\"50    " read/write a .viminfo file, don't store more
 
 " Only do this part when compiled with support for autocommands
 if has("autocmd")
-    augroup fedora
+  augroup fedora
     autocmd!
     " In text files, always limit the width of text to 78 characters
     " autocmd BufRead *.txt set tw=78
@@ -248,5 +264,12 @@ if &term=="xterm"
     set t_Sb=^[[4%dm
     set t_Sf=^[[3%dm
 endif
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""" Local Configurations """""""""""""""""""""""""""""""
+source ~/.local/dotfiles/vimrc
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

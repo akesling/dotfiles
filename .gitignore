@@ -1,2 +1,4 @@
 *.swp
 .vim/.netrwhist
+.vim/bundle/*
+.vim/eclim
