@@ -18,6 +18,7 @@ then
 fi
 # Fix tmux color issues (force 256 colors)
 alias tmux='tmux -2'
+alias ls='ls --color'
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 
