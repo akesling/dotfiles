@@ -36,3 +36,6 @@ alias pip='pip-python'
 
 #calendar with today highlighted - http://www.shell-fu.org/lister.php?id=210
 alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#/g'\'') /"'
+
+# Add npm installed binaries to path
+PATH=$PATH:~/Devel/nodejs/npm/bin
