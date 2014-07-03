@@ -39,3 +39,5 @@ alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#
 
 # Add npm installed binaries to path
 PATH=$PATH:~/Devel/nodejs/npm/bin
+
+source ~/.local/dotfiles/bashrc
