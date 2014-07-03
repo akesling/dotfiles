@@ -3,3 +3,5 @@
 .vim/bundle/*
 .vim/eclim
 .vim/view/highlights
+
+local_dotfiles/*
