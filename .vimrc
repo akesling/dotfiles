@@ -117,7 +117,9 @@ set listchars=tab:»·,trail:·,extends:#,nbsp:·  " Show me tabs and trailing
 
 set ruler       " show the cursor position all the time
 
-let &colorcolumn=join(range(81,999),",")  " Help with line-length visualization.
+"let &colorcolumn=join(range(81,999),",")
+" Help with line-length visualization.
+let &colorcolumn = join(map(range(1,1000), '"+" . v:val'), ",")
 
 " Don't wake up system with blinking cursor:
 " http://www.linuxpowertop.org/known.php
