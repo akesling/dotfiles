@@ -117,7 +117,7 @@ set listchars=tab:»·,trail:·,extends:#,nbsp:·  " Show me tabs and trailing
 
 set ruler       " show the cursor position all the time
 
-"let &colorcolumn=join(range(81,999),",")
+set textwidth=80  " Default to 80 character text width
 " Help with line-length visualization.
 let &colorcolumn = join(map(range(1,1000), '"+" . v:val'), ",")
 
