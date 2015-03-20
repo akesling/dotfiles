@@ -74,7 +74,7 @@ syntax on
 
 set bs=indent,eol,start         " Allow backspacing over everything in insert
                                 " mode.
-set ignorecase                  " Search is now case-insensitive.
+set ignorecase smartcase        " Search is now case-insensitive.
 set formatoptions+=j            " Allow removal of comment characters and such
                                 " when merging lines with J.
 set wildmenu                    " Use the wildmenu when doing "open" completions
@@ -115,9 +115,12 @@ set list
 set listchars=tab:»·,trail:·,extends:#,nbsp:·  " Show me tabs and trailing
                                                " whitespace
 
-set ruler       " show the cursor position all the time
+set ruler                " show the cursor position all the time
 
-set textwidth=80  " Default to 80 character text width
+set relativenumber       " Show relative line-number offset from current line
+set numberwidth=2        " Reduce gutter size as much as is reasonable
+
+set textwidth=80         " Default to 80 character text width
 " Help with line-length visualization.
 let &colorcolumn = join(map(range(1,1000), '"+" . v:val'), ",")
 
