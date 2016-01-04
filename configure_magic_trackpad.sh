@@ -17,3 +17,6 @@ xinput set-prop "${DEVICE}" 'Synaptics Scrolling Distance' -50, -50
 
 # Turn off inertial scrolling
 xinput set-prop "${DEVICE}" 'Synaptics Coasting Speed' 0, 0
+
+# Turn off edge scrolling
+xinput set-prop "${DEVICE}" 'Synaptics Edge Scrolling' 0, 0, 0

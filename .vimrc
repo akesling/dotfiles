@@ -33,12 +33,12 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Visual
-Plugin 'akesling/ondemandhighlight'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'bling/vim-airline'
+Plugin 'google/vim-searchindex'
 
 " Movement extension
-Plugin 'Lokaltog/vim-easymotion'
+Plugin 'easymotion/vim-easymotion'
 Plugin 'tpope/vim-unimpaired'
 
 " Code interactions
@@ -74,7 +74,9 @@ syntax on
 
 set bs=indent,eol,start         " Allow backspacing over everything in insert
                                 " mode.
-set ignorecase smartcase        " Search is now case-insensitive.
+set ignorecase smartcase        " Search is now case-insensitive by default, but
+                                " case-sensitive if it contains an upper-case
+                                " symbol.
 set formatoptions+=j            " Allow removal of comment characters and such
                                 " when merging lines with J.
 set wildmenu                    " Use the wildmenu when doing "open" completions
