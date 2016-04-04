@@ -34,7 +34,8 @@ Plugin 'gmarik/Vundle.vim'
 
 " Visual
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'google/vim-searchindex'
 
 " Movement extension
