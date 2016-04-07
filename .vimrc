@@ -161,6 +161,10 @@ vnoremap : ;
 nnoremap j gj
 nnoremap k gk
 
+" INSERT A @#$%ing NEWLINE WITHOUT ENTERING INSERT MODE
+nnoremap <silent> <CR> o<Esc>
+nnoremap <silent> <S-CR> O<Esc>
+
 " Easy window navigation
 map <C-h> <C-w>h
 map <C-j> <C-w>j
