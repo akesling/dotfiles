@@ -1,6 +1,7 @@
 *.swp
 .vim/.netrwhist
 .vim/bundle/*
+.vim/cache
 .vim/eclim
 .vim/view/highlights
 

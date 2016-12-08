@@ -12,58 +12,10 @@ let mapleader=","               " Make life easier.
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Pre-plugins"""""""""""""""""""""""""""""""""""""""""
+""""""""" Initialization """""""""""""""""""""""""""""""""""""
 
 " Put everything in a consistent state for plugin enabling
 set nocompatible    " Because... THIS. IS. VIM.
-filetype off
-syntax off
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Vundle """""""""""""""""""""""""""""""""""""""""""""
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim/
-call vundle#begin()
-
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-
-" Visual
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'google/vim-searchindex'
-
-" Movement extension
-Plugin 'easymotion/vim-easymotion'
-Plugin 'tpope/vim-unimpaired'
-
-" Code interactions
-Plugin 'nsf/gocode', {'rtp': 'vim/'}
-"Plugin 'scrooloose/syntastic'
-Plugin 'tpope/vim-commentary'
-
-" Full-on Plugins
-Plugin 'scrooloose/nerdtree'
-Plugin 'sjl/gundo.vim'
-
-" Misc
-Plugin 'tpope/vim-sensible'
-Plugin 'tpope/vim-repeat'
-
-call vundle#end()
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Post-plugins """""""""""""""""""""""""""""""""""""""
-
-" All Plugins are done, let's make this human-useable
 filetype plugin indent on
 syntax on
 
@@ -132,8 +84,6 @@ let &colorcolumn = join(map(range(1,1000), '"+" . v:val'), ",")
 set guicursor += ",a:blinkon0"
 
 colorscheme solarized
-let g:solarized_termtrans=1 " Solarized otherwise doesn't respect transparency
-
 set background=dark  " Dark like cave.
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -177,22 +127,6 @@ nmap <silent> <leader>/ :nohlsearch<CR>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Latex """"""""""""""""""""""""""""""""""""""""""""""
-
-" Because IMAP steals <C-j> if we don't bind it ahead
-map <C-space> <Plug>IMAP_JumpForward
-
-let g:Tex_FormatDependency_pdf='dvi,pdf'
-let g:Tex_CompileRule_pdf = 'dvipdf $*.dvi'
-
-let g:Tex_ViewRule_pdf='evince'
-let g:Tex_DefaultTargetFormat='pdf'
-"let g:Tex_CompileRule_pdf = 'pdflatex -interaction=nonstopmode $*'
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""" Tabs """""""""""""""""""""""""""""""""""""""""""""""
 
 nmap <silent> <leader>n :tabnew<CR>
@@ -216,85 +150,10 @@ set smartindent
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" NERDTree """""""""""""""""""""""""""""""""""""""""""
-
-nmap <silent> <leader>h :NERDTreeToggle<CR>
-nnoremap <F4> :NERDTreeToggle<CR>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Syntastic """"""""""""""""""""""""""""""""""""""""""
-
-let g:syntastic_cpp_compiler_options = ' -std=c++11'
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Gundo """"""""""""""""""""""""""""""""""""""""""""""
-
-nnoremap <silent> <leader>g :GundoToggle<CR>
-nnoremap <F5> :GundoToggle<CR>
-
-let g:gundo_right = 1
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""" Misc """""""""""""""""""""""""""""""""""""""""""""""
 
 " Quickly edit/reload the vimrc file
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
-
-set viminfo='20,\"50    " read/write a .viminfo file, don't store more
-                        " than 50 lines of registers
-
-augroup fedora
-  autocmd!
-  " In text files, always limit the width of text to 78 characters
-  " autocmd BufRead *.txt set tw=78
-  " When editing a file, always jump to the last cursor position
-  autocmd BufReadPost *
-  \ if line("'\"") > 0 && line ("'\"") <= line("$") |
-  \   exe "normal! g'\"" |
-  \ endif
-  " don't write swapfile on most commonly used directories for NFS mounts or USB sticks
-  autocmd BufNewFile,BufReadPre /media/*,/mnt/* set directory=~/tmp,/var/tmp,/tmp
-  " start with spec file template
-  autocmd BufNewFile *.spec 0r /usr/share/vim/vimfiles/template.spec
-augroup END
-
-" Better cscope integration
-if has("cscope") && filereadable("/usr/bin/cscope")
-    set csprg=/usr/bin/cscope
-    set csto=0
-    set cst
-    set nocsverb
-    " add any database in current directory
-    if filereadable("cscope.out")
-        cs add cscope.out
-    " else add database pointed to by environment
-    elseif $CSCOPE_DB != ""
-        cs add $CSCOPE_DB
-    endif
-    set csverb
-endif
-
-if &term=="xterm"
-    set t_Co=8
-    set t_Sb=^[[4%dm
-    set t_Sf=^[[3%dm
-endif
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Local Configurations """""""""""""""""""""""""""""""
-source ~/.local/dotfiles/.vimrc
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
