@@ -37,6 +37,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'google/vim-searchindex'
+Plugin 'leafgarland/typescript-vim'
 
 " Movement extension
 Plugin 'easymotion/vim-easymotion'
@@ -47,9 +48,14 @@ Plugin 'nsf/gocode', {'rtp': 'vim/'}
 "Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-commentary'
 
+Plugin 'ternjs/tern_for_vim'
+
 " Full-on Plugins
 Plugin 'scrooloose/nerdtree'
 Plugin 'sjl/gundo.vim'
+
+" tmux integrations
+Plugin 'tmux-plugins/vim-tmux-focus-events'
 
 " Misc
 Plugin 'tpope/vim-sensible'
@@ -85,12 +91,17 @@ set wildignore=*.swp,*.bak,*.pyc,*.class
 set wildmode=list:longest,full  " Default search to both show the completion
                                 " list and auto-complete to longest
                                 " simultaneously.
-set hidden      " hide buffers instead of closing them
-set history=1000         " remember more commands and search history
+                                "
 set nobackup
+set hidden               " hide buffers instead of closing them
+set autoread             " if the file has been changed outside vim and not
+                         " inside, update the buffer to the new file.
+
+set history=1000         " remember more commands and search history
 set undolevels=1000      " use many muchos levels of undo
 set noerrorbells         " don't beep
 set pastetoggle=<F2>     " toggle paste mode
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -162,8 +173,8 @@ nnoremap j gj
 nnoremap k gk
 
 " INSERT A @#$%ing NEWLINE WITHOUT ENTERING INSERT MODE
-nnoremap <silent> <CR> o<Esc>
-nnoremap <silent> <S-CR> O<Esc>
+" nnoremap <silent> <CR> o<Esc>
+" nnoremap <silent> <S-CR> O<Esc>
 
 " Easy window navigation
 map <C-h> <C-w>h
@@ -253,6 +264,9 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 set viminfo='20,\"50    " read/write a .viminfo file, don't store more
                         " than 50 lines of registers
 
+au FocusGained,BufEnter * :checktime " trigger autoread when changing vim
+                                     " buffers
+
 augroup fedora
   autocmd!
   " In text files, always limit the width of text to 78 characters
@@ -289,6 +303,22 @@ if &term=="xterm"
     set t_Sb=^[[4%dm
     set t_Sf=^[[3%dm
 endif
+
+" Select a position from the jump list.
+function! GotoJump()
+  jumps
+  let j = input("Please select your jump: ")
+  if j != ''
+    let pattern = '\v\c^\+'
+    if j =~ pattern
+      let j = substitute(j, pattern, '', 'g')
+      execute "normal " . j . "\<c-i>"
+    else
+      execute "normal " . j . "\<c-o>"
+    endif
+  endif
+endfunction
+nmap <Leader>j :call GotoJump()<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
