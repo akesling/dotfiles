@@ -38,6 +38,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'google/vim-searchindex'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'mhinz/vim-signify'
 
 " Movement extension
 Plugin 'easymotion/vim-easymotion'
