@@ -48,12 +48,13 @@ Plugin 'tpope/vim-unimpaired'
 Plugin 'nsf/gocode', {'rtp': 'vim/'}
 "Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-commentary'
+Plugin 'Valloric/YouCompleteMe'
 
 Plugin 'ternjs/tern_for_vim'
 
 " Full-on Plugins
 Plugin 'scrooloose/nerdtree'
-Plugin 'sjl/gundo.vim'
+Plugin 'simnalamburt/vim-mundo'
 
 " tmux integrations
 Plugin 'tmux-plugins/vim-tmux-focus-events'
@@ -245,12 +246,12 @@ let g:syntastic_cpp_compiler_options = ' -std=c++11'
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Gundo """"""""""""""""""""""""""""""""""""""""""""""
+""""""""" Mundo """"""""""""""""""""""""""""""""""""""""""""""
 
-nnoremap <silent> <leader>g :GundoToggle<CR>
-nnoremap <F5> :GundoToggle<CR>
+nnoremap <silent> <leader>g :MundoToggle<CR>
+nnoremap <F5> :MundoToggle<CR>
 
-let g:gundo_right = 1
+let g:mundo_right = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
