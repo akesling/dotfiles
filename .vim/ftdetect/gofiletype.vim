@@ -1,1 +1,0 @@
-/home/akesling/Devel/go/misc/vim/ftdetect/gofiletype.vim
