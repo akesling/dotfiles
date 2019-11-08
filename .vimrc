@@ -184,6 +184,24 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
+" Easy tab navigation by number
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>0 :tablast<cr>
+
+" Toggle to last active tab
+
+au TabLeave * let g:lasttab = tabpagenr()
+nnoremap <silent> <leader>- :exe "tabn ".g:lasttab<cr>
+vnoremap <silent> <leader>- :exe "tabn ".g:lasttab<cr>
+
 nmap <silent> <leader>/ :nohlsearch<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -253,6 +271,16 @@ nnoremap <F5> :MundoToggle<CR>
 
 let g:mundo_right = 1
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+""""""""" Language Specific Configuration """"""""""""""""""""
+
+" YAML
+au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
