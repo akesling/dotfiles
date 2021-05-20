@@ -14,7 +14,7 @@ eval `dircolors ~/.dircolors`
 
 # Fix tmux color issues (force 256 colors)
 alias tmux='tmux -2'
-alias ls='ls --color'
+alias ls='ls -G'
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 
@@ -35,3 +35,7 @@ alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#
 PATH=$PATH:~/Devel/nodejs/npm/bin
 
 source ~/.local/dotfiles/.bashrc
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

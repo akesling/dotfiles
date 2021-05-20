@@ -38,17 +38,18 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'google/vim-searchindex'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'jonsmithers/vim-html-template-literals'
 Plugin 'mhinz/vim-signify'
+Plugin 'tpope/vim-markdown'
 
 " Movement extension
 Plugin 'easymotion/vim-easymotion'
 Plugin 'tpope/vim-unimpaired'
 
 " Code interactions
-Plugin 'nsf/gocode', {'rtp': 'vim/'}
-"Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-commentary'
-Plugin 'Valloric/YouCompleteMe'
+Plugin 'ycm-core/YouCompleteMe'
 
 Plugin 'ternjs/tern_for_vim'
 
@@ -208,6 +209,15 @@ nmap <silent> <leader>/ :nohlsearch<CR>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""" Markdown """""""""""""""""""""""""""""""""""""""""""
+
+" for 'tpope/vim-markdown'
+let g:markdown_fenced_languages = ['rust', 'python', 'java', 'javascript', 'typescript']
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""" Latex """"""""""""""""""""""""""""""""""""""""""""""
 
 " Because IMAP steals <C-j> if we don't bind it ahead
@@ -256,9 +266,18 @@ nnoremap <F4> :NERDTreeToggle<CR>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""" Syntastic """"""""""""""""""""""""""""""""""""""""""
+""""""""" YouCompleteMe """"""""""""""""""""""""""""""""""""""
 
-let g:syntastic_cpp_compiler_options = ' -std=c++11'
+" When YCM opens a preview window, show syntax highlighting for rustdoc
+function PreviewSyntax() abort
+    if &previewwindow && getbufvar('#', "&filetype") == 'rust'
+        setlocal syntax=markdown
+    endif
+endfunction
+autocmd WinEnter * call PreviewSyntax()
+
+let g:ycm_rust_toolchain_root = expand('~') . '/.cargo/'
+nmap <silent> <leader>t :YcmCompleter GoToImprecise<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -279,6 +298,10 @@ let g:mundo_right = 1
 " YAML
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+" TSX files
+au! BufNewFile,BufReadPost *.{tsx} set filetype=typescript foldmethod=indent
+autocmd FileType typescript setlocal ts=2 sts=2 sw=2 expandtab
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
