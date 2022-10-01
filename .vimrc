@@ -63,6 +63,7 @@ Plugin 'tmux-plugins/vim-tmux-focus-events'
 " Misc
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-repeat'
+Plugin 'ConradIrwin/vim-bracketed-paste'
 
 call vundle#end()
 
@@ -148,6 +149,9 @@ set guicursor += ",a:blinkon0"
 colorscheme solarized
 let g:solarized_termtrans=1 " Solarized otherwise doesn't respect transparency
 
+let g:airline#extensions#tabline#enabled=1 " Enable Airline control of tabline
+let g:airline#extensions#tabline#formatter='jsformatter'
+
 set background=dark  " Dark like cave.
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -196,6 +200,9 @@ noremap <leader>7 7gt
 noremap <leader>8 8gt
 noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
+
+" Insert TODO(alex) on next line
+map <leader>o oTODO(alex):<Esc>gcc$a
 
 " Toggle to last active tab
 
@@ -277,7 +284,10 @@ endfunction
 autocmd WinEnter * call PreviewSyntax()
 
 let g:ycm_rust_toolchain_root = expand('~') . '/.cargo/'
-nmap <silent> <leader>t :YcmCompleter GoToImprecise<CR>
+nmap <silent> <leader>t :YcmCompleter GoTo<CR>
+nmap <silent> <leader>c :YcmCompleter GetDoc<CR>
+nmap <silent> <leader>r :YcmCompleter GoToReferences<CR>
+nmap <silent> <leader>u :YcmCompleter GoToCallers<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
