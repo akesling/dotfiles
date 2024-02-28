@@ -1,0 +1,18 @@
+[core]
+	editor = vim
+[user]
+	email = alex.kesling@gmail.com
+	name = A K
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[init]
+	defaultBranch = main
+[safe]
+	directory = /workspace
+[merge]
+	conflictstyle = diff3
+[diff]
+	algorithm = histogram

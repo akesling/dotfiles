@@ -313,6 +313,10 @@ autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 au! BufNewFile,BufReadPost *.{tsx} set filetype=typescript foldmethod=indent
 autocmd FileType typescript setlocal ts=2 sts=2 sw=2 expandtab
 
+" Go
+au! BufNewFile,BufReadPost *.{go} set filetype=go foldmethod=indent
+autocmd FileType go setlocal ts=4 sts=4 sw=4 noexpandtab
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
