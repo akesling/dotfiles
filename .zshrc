@@ -1,75 +1,65 @@
-# Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+###############################################################################
+# Basic Configuration #########################################################
+###############################################################################
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="robbyrussell"
+export HISTSIZE=2000000
 
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+setopt EXTENDED_HISTORY          # Write the history file in the
+                                 # ":start:elapsed;command" format.
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not
+                                 # when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded
+                                 # again.
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+autoload -U colors && colors
+setopt PROMPT_SUBST
+# PROMPT='%{$fg[green]%}%m %{$fg[white]%}| %{$fg[red]%}%~ %{$fg[white]%}| %{$fg[magenta]%}%T %{$fg[magenta,underline]%}%D{%Y-%m-%d}
+# %{$fg[green]%}%n%{$fg[white]%} ( %{$fg[cyan]%}%! : %#%{$fg[white]%} ) %{$reset_color%}'
 
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# Original Bash configuration
+# export PS1="\n\[\e[1;32m\]\H \[\e[37m\]| \[\e[31m\]\w \[\e[37m\]| \[\e[1;35m\]\t \[\e[4;35m\]\d\n\[\e[0;32m\]\u\[\e[1;37m\] ( \[\e[1;36m\]\! : \#\[\e[1;37m\] ) \[\e[0;39m\]"
+PROMPT='
+$(tput setaf 10)$(hostname) $(tput setaf 7)| $(tput setaf 1)$(pwd) $(tput setaf 7)| $(tput setaf 13)$(tput smul)$(date +%H:%M:%S) $(date +%Y-%m-%d)$(tput rmul)
+$(tput setaf 2)$(whoami)$(tput setaf 7) ( $(history | tail -n 1 | awk "{print \$1}") ) %# %{$reset_color%}'
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+###############################################################################
+# PATH ########################################################################
+###############################################################################
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+PATH="${PATH}:${HOME}/.local/homebrew/bin"
+PATH="${PATH}:/Applications/Docker.app/Contents/Resources/bin"
+PATH="${PATH}:/Users/alex/.local/homebrew/opt/libpq/bin"
 
-# Uncomment the following line to disable command auto-correction.
-# DISABLE_CORRECTION="true"
+###############################################################################
+# Aliases #####################################################################
+###############################################################################
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
+alias vim=nvim
+alias ls="ls -G"
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+###############################################################################
+# Commands ####################################################################
+###############################################################################
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
+bindkey -v  # Vim insert mode config
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+# History managed by FZF plugin now, so the following is vestigial
+# bindkey ^R history-incremental-search-backward
+# bindkey ^S history-incremental-search-forward
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git)
+###############################################################################
+# Extensions ##################################################################
+###############################################################################
 
-source $ZSH/oh-my-zsh.sh
+# FZF
+source ~/dotfiles/fzf_zsh.sh
 
-# User configuration
+###############################################################################
+# Tooling #####################################################################
+###############################################################################
 
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-source ~/.local/dotfiles/zshrc
+export HOMEBREW_NO_AUTO_UPDATE=1
