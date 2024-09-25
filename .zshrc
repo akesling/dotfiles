@@ -22,9 +22,11 @@ setopt PROMPT_SUBST
 
 # Original Bash configuration
 # export PS1="\n\[\e[1;32m\]\H \[\e[37m\]| \[\e[31m\]\w \[\e[37m\]| \[\e[1;35m\]\t \[\e[4;35m\]\d\n\[\e[0;32m\]\u\[\e[1;37m\] ( \[\e[1;36m\]\! : \#\[\e[1;37m\] ) \[\e[0;39m\]"
+
 PROMPT='
-$(tput setaf 10)$(hostname) $(tput setaf 7)| $(tput setaf 1)$(pwd) $(tput setaf 7)| $(tput setaf 13)$(tput smul)$(date +%H:%M:%S) $(date +%Y-%m-%d)$(tput rmul)
-$(tput setaf 2)$(whoami)$(tput setaf 7) ( $(history | tail -n 1 | awk "{print \$1}") ) %# %{$reset_color%}'
+%{$(tput setaf 10)%}$(hostname) %{$(tput setaf 7)%}| %{$(tput setaf 1)%}$(pwd) %{$(tput setaf 7)%}| %{$(tput setaf 13)%}$(tput smul)$(date +%H:%M:%S) $(date +%Y-%m-%d)%{$(tput rmul)%}
+%{$(tput setaf 2)%}$(whoami)%{$(tput setaf 7)%} ( $(history | tail -n 1 | awk "{print \$1}") ) %# %{$reset_color%}'
+
 
 ###############################################################################
 # PATH ########################################################################
