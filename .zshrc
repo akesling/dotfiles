@@ -2,7 +2,7 @@
 # Basic Configuration #########################################################
 ###############################################################################
 
-export HISTSIZE=2000000
+export SAVEHIST=HISTSIZE=2000000
 
 
 setopt EXTENDED_HISTORY          # Write the history file in the
@@ -25,7 +25,7 @@ setopt PROMPT_SUBST
 
 PROMPT='
 %{$(tput setaf 10)%}$(hostname) %{$(tput setaf 7)%}| %{$(tput setaf 1)%}$(pwd) %{$(tput setaf 7)%}| %{$(tput setaf 13)%}$(tput smul)$(date +%H:%M:%S) $(date +%Y-%m-%d)%{$(tput rmul)%}
-%{$(tput setaf 2)%}$(whoami)%{$(tput setaf 7)%} ( $(history | tail -n 1 | awk "{print \$1}") ) %# %{$reset_color%}'
+%{$(tput setaf 2)%}$(whoami)%{$(tput setaf 7)%} ( $(wc -l ~/.zsh_history | cut -d" " -f5) ) %# %{$reset_color%}'
 
 
 ###############################################################################
