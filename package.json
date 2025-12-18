@@ -1,0 +1,8 @@
+{
+    "scripts": {
+        "claude": "claude"
+    },
+    "devDependencies": {
+        "@anthropic-ai/claude-code": "^1.0.128"
+    }
+}

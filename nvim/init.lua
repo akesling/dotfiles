@@ -144,6 +144,7 @@ vim.api.nvim_set_option('updatetime', 300)
 
 --------------------------------------------------------------
 --------- Mundo ----------------------------------------------
+vim.g.python3_host_prog = '/Users/alex/.local/bin/pynvim-python'
 
 -- nnoremap <silent> <leader>g :MundoToggle<CR>
 vim.api.nvim_set_keymap('n', '<leader>g', ':MundoToggle<CR>', { noremap = true, silent = true })

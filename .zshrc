@@ -7,9 +7,9 @@ export SAVEHIST=HISTSIZE=2000000
 
 setopt EXTENDED_HISTORY          # Write the history file in the
                                  # ":start:elapsed;command" format.
-setopt INC_APPEND_HISTORY        # Write to the history file immediately, not
-                                 # when the shell exits.
-setopt SHARE_HISTORY             # Share history between all sessions.
+# setopt INC_APPEND_HISTORY        # Write to the history file immediately, not
+#                                  # when the shell exits.
+# setopt SHARE_HISTORY             # Share history between all sessions.
 setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded
                                  # again.
 setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
@@ -25,23 +25,27 @@ setopt PROMPT_SUBST
 
 PROMPT='
 %{$(tput setaf 10)%}$(hostname) %{$(tput setaf 7)%}| %{$(tput setaf 1)%}$(pwd) %{$(tput setaf 7)%}| %{$(tput setaf 13)%}$(tput smul)$(date +%H:%M:%S) $(date +%Y-%m-%d)%{$(tput rmul)%}
-%{$(tput setaf 2)%}$(whoami)%{$(tput setaf 7)%} ( $(wc -l ~/.zsh_history | cut -d" " -f5) ) %# %{$reset_color%}'
+%{$(tput setaf 2)%}$(whoami)%{$(tput setaf 7)%} ( $(wc -l ~/.zsh_history | cut -d" " -f4) ) %# %{$reset_color%}'
 
 
 ###############################################################################
 # PATH ########################################################################
 ###############################################################################
 
-PATH="${PATH}:${HOME}/.local/homebrew/bin"
-PATH="${PATH}:/Applications/Docker.app/Contents/Resources/bin"
-PATH="${PATH}:/Users/alex/.local/homebrew/opt/libpq/bin"
+export PATH="${PATH}:${HOME}/.local/homebrew/bin"
+export PATH="/Users/alex/.local/bin:$PATH"
+export PATH="${PATH}:/Applications/Docker.app/Contents/Resources/bin"
+export PATH="${PATH}:/Users/alex/.local/homebrew/opt/libpq/bin"
+export PATH="${PATH}:${HOME}/usr/local/sessionmanagerplugin/bin"
 
 ###############################################################################
 # Aliases #####################################################################
 ###############################################################################
 
+alias ovim="$(which vim)"
 alias vim=nvim
 alias ls="ls -G"
+alias history="history 0"
 
 ###############################################################################
 # Commands ####################################################################
@@ -65,3 +69,17 @@ source ~/dotfiles/fzf_zsh.sh
 ###############################################################################
 
 export HOMEBREW_NO_AUTO_UPDATE=1
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/alex/Devel/misc/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/alex/Devel/misc/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/alex/Devel/misc/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/alex/Devel/misc/google-cloud-sdk/completion.zsh.inc'; fi
+
+###############################################################################
+# PyENV #######################################################################
+###############################################################################
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"

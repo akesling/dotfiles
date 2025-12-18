@@ -6,3 +6,5 @@
 .vim/view/highlights
 
 local_dotfiles/*
+
+node_modules/*
