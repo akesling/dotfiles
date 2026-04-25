@@ -18,5 +18,4 @@ return {
     "mfussenegger/nvim-dap",
 
     "simnalamburt/vim-mundo",
-    "altercation/vim-colors-solarized",
 }

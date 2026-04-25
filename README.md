@@ -51,12 +51,13 @@ GUI font sizes) into the husk; nothing under `local_dotfiles/` is committed.
    point `target` at the destination (e.g. `nvim` → `.config/nvim`).
 3. `./setup.sh --apply`.
 
-If the file should support per-machine overrides, also add `all husk - .my-new-rc`
-and `source ~/.local/dotfiles/.my-new-rc` at the bottom of the rc file itself.
+If the file should support per-machine overrides, also add `all husk -
+.my-new-rc` and `source ~/.local/dotfiles/.my-new-rc` at the bottom of the rc
+file itself.
 
 ## Notes
 
 - `setup.sh` works from any cwd (uses its own location, not `pwd`).
 - Default mode is dry-run — no flag, no changes.
-- macOS and Linux are both supported; Linux-only files (`.xinitrc`, `.Xresources`,
-  `.Xmodmap`) are skipped on macOS.
+- macOS and Linux are both supported; Linux-only files (`.xinitrc`,
+  `.Xresources`, `.Xmodmap`) are skipped on macOS.
