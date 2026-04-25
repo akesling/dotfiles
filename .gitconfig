@@ -1,5 +1,5 @@
 [core]
-	editor = vim
+	editor = nvim
 [user]
 	email = alex.kesling@gmail.com
 	name = A K

@@ -42,6 +42,9 @@ PATH="${PATH}:/Users/alex/.local/homebrew/opt/libpq/bin"
 
 alias vim=nvim
 
+export EDITOR=nvim
+export VISUAL=nvim
+
 # Solarized dark colors for ls/completion. Prefer GNU ls + dircolors when
 # available (macOS: `brew install coreutils` provides gls/gdircolors), and
 # fall back to BSD ls -G otherwise.

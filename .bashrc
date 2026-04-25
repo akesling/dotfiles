@@ -34,9 +34,9 @@ export PS1="\n\[\e[1;32m\]\H \[\e[37m\]| \[\e[31m\]\w \[\e[37m\]| \[\e[1;35m\]\t
 ### Used for blog post to clean up username/hostname. Saving in case of need ##
 #export PS1="\n   \[\e[1;32m\]herein \[\e[37m\]| \[\e[31m\]\w \[\e[37m\]| \[\e[1;35m\]\t \[\e[4;35m\]\d\n\[\e[0;32m\]   echoet\[\e[1;37m\] ( \[\e[1;36m\]\! : \#\[\e[1;37m\] ) \$(__git_ps1 '%s ')\$ \[\e[0;39m\]"
 
-export UAEDITOR=vim
-export EDITOR=vim
-export VISUAL=vim
+export UAEDITOR=nvim
+export EDITOR=nvim
+export VISUAL=nvim
 
 #calendar with today highlighted - http://www.shell-fu.org/lister.php?id=210
 alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#/g'\'') /"'
