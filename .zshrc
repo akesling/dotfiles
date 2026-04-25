@@ -41,7 +41,19 @@ PATH="${PATH}:/Users/alex/.local/homebrew/opt/libpq/bin"
 ###############################################################################
 
 alias vim=nvim
-alias ls="ls -G"
+
+# Solarized dark colors for ls/completion. Prefer GNU ls + dircolors when
+# available (macOS: `brew install coreutils` provides gls/gdircolors), and
+# fall back to BSD ls -G otherwise.
+if command -v gdircolors >/dev/null 2>&1; then
+    eval "$(gdircolors ~/.dircolors)"
+    alias ls='gls --color=auto'
+elif command -v dircolors >/dev/null 2>&1; then
+    eval "$(dircolors ~/.dircolors)"
+    alias ls='ls --color=auto'
+else
+    alias ls='ls -G'
+fi
 
 ###############################################################################
 # Commands ####################################################################

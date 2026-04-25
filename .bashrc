@@ -10,11 +10,21 @@ export HISTSIZE=2000000
 
 alias exit='history -a && exit'
 
-eval `dircolors ~/.dircolors`
+# Solarized dark colors for ls/completion. Prefer GNU ls + dircolors when
+# available (macOS: `brew install coreutils` provides gls/gdircolors), and
+# fall back to BSD ls -G otherwise.
+if command -v gdircolors >/dev/null 2>&1; then
+    eval "$(gdircolors ~/.dircolors)"
+    alias ls='gls --color=auto'
+elif command -v dircolors >/dev/null 2>&1; then
+    eval "$(dircolors ~/.dircolors)"
+    alias ls='ls --color=auto'
+else
+    alias ls='ls -G'
+fi
 
 # Fix tmux color issues (force 256 colors)
 alias tmux='tmux -2'
-alias ls='ls -G'
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 

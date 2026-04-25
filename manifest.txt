@@ -20,6 +20,7 @@ all   link  .tmux.conf     .tmux.conf
 all   link  .ideavimrc     .ideavimrc
 all   link  .mailcap       .mailcap
 all   link  nvim           .config/nvim
+all   link  dircolors/dircolors.ansi-dark  .dircolors
 
 linux link  .xinitrc       .xinitrc
 linux link  .Xmodmap       .Xmodmap
