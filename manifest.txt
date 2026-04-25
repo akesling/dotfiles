@@ -1,0 +1,31 @@
+# dotfiles manifest
+# Format: <os> <kind> <source> <target>
+#   os:     all | macos | linux
+#   kind:   link | husk
+#   source: path relative to dotfiles repo (ignored for husk)
+#   target: path relative to $HOME (link), or relative to $LOCAL_DOTFILES (husk)
+#
+# link: symlink $DOTFILES_SRC/<source> -> $HOME/<target>
+# husk: touch $LOCAL_DOTFILES/<target> (an empty per-machine override file)
+
+all   link  .bashrc        .bashrc
+all   link  .zshrc         .zshrc
+all   link  .vimrc         .vimrc
+all   link  .vim           .vim
+all   link  .inputrc       .inputrc
+all   link  .npmrc         .npmrc
+all   link  .gitconfig     .gitconfig
+all   link  .gitignore     .gitignore
+all   link  .tmux.conf     .tmux.conf
+all   link  .ideavimrc     .ideavimrc
+all   link  .mailcap       .mailcap
+all   link  nvim           .config/nvim
+
+linux link  .xinitrc       .xinitrc
+linux link  .Xmodmap       .Xmodmap
+linux link  .Xresources    .Xresources
+
+# Per-machine override husks (sourced from the matching rc file).
+all   husk  -              .bashrc
+all   husk  -              .zshrc
+all   husk  -              .vimrc

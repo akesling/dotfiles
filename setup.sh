@@ -1,37 +1,194 @@
 #!/usr/bin/env bash
+#
+# setup.sh — install/check/uninstall dotfile symlinks declared in manifest.txt
+#
+# Usage:
+#   setup.sh [--apply | --check | --uninstall] [--force] [-h|--help]
+#
+# Default mode is dry-run: prints what would happen, changes nothing.
+# --apply       perform the changes
+# --check       exit 0 if everything is already linked correctly, else 1
+# --uninstall   remove only symlinks this script created (pointing into the repo)
+# --force       overwrite conflicting symlinks (still backs up real files)
 
-# Start from dotfiles directory
-DOTFILES_SRC=$(pwd)
-LOCAL_DOTFILES=${DOTFILES_SRC}/local_dotfiles
+set -euo pipefail
+IFS=$'\n\t'
 
-RC_FILES=".*rc
-.vim"
+DOTFILES_SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOCAL_DOTFILES="${DOTFILES_SRC}/local_dotfiles"
+MANIFEST="${DOTFILES_SRC}/manifest.txt"
+BACKUP_DIR="${HOME}/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 
-NOP=''
-NOP='echo'
-if ${NOP}
-    then
-        echo "To actually run this file, comment out NOP='echo'."
-fi
+MODE="dry-run"
+FORCE=0
 
-${NOP}
-echo "Making local dotfile husks in ${LOCAL_DOTFILES}."
-${NOP} mkdir -p ${LOCAL_DOTFILES}
-for FILE in ${RC_FILES}
-    do
-        ${NOP}
-        echo "Touching local dotfile in ${LOCAL_DOTFILES}/${FILE}."
-        ${NOP} touch ${LOCAL_DOTFILES}/${FILE}
-done
+# Tallies for --check / final summary.
+N_OK=0
+N_CHANGED=0
+N_CONFLICT=0
 
-${NOP}
-echo "Linking local dotfile directory (${LOCAL_DOTFILES}) in ~/.local."
-${NOP} cd ~/.local
-${NOP} ln -s ${LOCAL_DOTFILES} dotfiles
+usage() {
+    sed -n '2,13p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+}
 
-${NOP}
-echo "Linking general dotfiles into ~"
-${NOP} cd ~
-for FILE in ${RC_FILES}
-    do ${NOP} ln -s ${DOTFILES_SRC}/${FILE}
-done
+die() { printf 'error: %s\n' "$*" >&2; exit 2; }
+
+ok()   { printf '  \033[32mok\033[0m       %s\n' "$*"; N_OK=$(( N_OK + 1 )); }
+act()  { printf '  \033[33mchange\033[0m   %s\n' "$*"; N_CHANGED=$(( N_CHANGED + 1 )); }
+warn() { printf '  \033[31mconflict\033[0m %s\n' "$*"; N_CONFLICT=$(( N_CONFLICT + 1 )); }
+
+run() {
+    if [[ "${MODE}" == "apply" || "${MODE}" == "uninstall" ]]; then
+        "$@"
+    fi
+}
+
+detect_os() {
+    case "$(uname -s)" in
+        Darwin) echo macos ;;
+        Linux)  echo linux ;;
+        *)      echo unknown ;;
+    esac
+}
+
+# Read manifest, filter by os, emit "kind\tsource\ttarget" rows.
+read_manifest() {
+    local host_os=$1 line os kind src tgt
+    [[ -f "${MANIFEST}" ]] || die "manifest not found: ${MANIFEST}"
+    while IFS= read -r line || [[ -n "${line}" ]]; do
+        line="${line%%#*}"
+        [[ -z "${line// }" ]] && continue
+        # Re-enable whitespace splitting just for this read.
+        IFS=$' \t' read -r os kind src tgt <<<"${line}"
+        [[ "${os}" == "all" || "${os}" == "${host_os}" ]] || continue
+        printf '%s\t%s\t%s\n' "${kind}" "${src}" "${tgt}"
+    done < "${MANIFEST}"
+}
+
+# install_link <abs_source> <abs_target>
+install_link() {
+    local src=$1 tgt=$2 cur
+    [[ -e "${src}" || -L "${src}" ]] || { warn "${tgt} -> ${src} (source missing)"; return; }
+
+    if [[ -L "${tgt}" ]]; then
+        cur="$(readlink "${tgt}")"
+        if [[ "${cur}" == "${src}" ]]; then
+            ok "${tgt}"
+            return
+        fi
+        if (( FORCE )); then
+            act "relink ${tgt} (was -> ${cur})"
+            run rm -- "${tgt}"
+        else
+            warn "${tgt} is a symlink to ${cur} (use --force to relink)"
+            return
+        fi
+    elif [[ -e "${tgt}" ]]; then
+        act "backup ${tgt} -> ${BACKUP_DIR}/"
+        run mkdir -p -- "${BACKUP_DIR}"
+        run mv -- "${tgt}" "${BACKUP_DIR}/"
+    fi
+
+    run mkdir -p -- "$(dirname "${tgt}")"
+    act "link ${tgt} -> ${src}"
+    run ln -s -- "${src}" "${tgt}"
+}
+
+uninstall_link() {
+    local src=$1 tgt=$2 cur
+    if [[ ! -L "${tgt}" ]]; then
+        ok "${tgt} (not a symlink, leaving alone)"
+        return
+    fi
+    cur="$(readlink "${tgt}")"
+    if [[ "${cur}" != "${src}" ]]; then
+        warn "${tgt} -> ${cur} (not ours, leaving alone)"
+        return
+    fi
+    act "remove ${tgt}"
+    run rm -- "${tgt}"
+}
+
+install_husk() {
+    local tgt=$1 path="${LOCAL_DOTFILES}/$1"
+    if [[ -e "${path}" ]]; then
+        ok "husk ${tgt}"
+        return
+    fi
+    act "create husk ${path}"
+    run mkdir -p -- "$(dirname "${path}")"
+    run touch -- "${path}"
+}
+
+main() {
+    while (( $# )); do
+        case "$1" in
+            --apply)     MODE=apply ;;
+            --check)     MODE=check ;;
+            --uninstall) MODE=uninstall ;;
+            --force)     FORCE=1 ;;
+            -h|--help)   usage; exit 0 ;;
+            *) die "unknown argument: $1" ;;
+        esac
+        shift
+    done
+
+    local host_os
+    host_os=$(detect_os)
+    [[ "${host_os}" != unknown ]] || die "unsupported OS: $(uname -s)"
+
+    printf 'mode: %s   os: %s   src: %s\n\n' "${MODE}" "${host_os}" "${DOTFILES_SRC}"
+
+    if [[ "${MODE}" != uninstall ]]; then
+        run mkdir -p -- "${LOCAL_DOTFILES}"
+        run mkdir -p -- "${HOME}/.local"
+        local local_link="${HOME}/.local/dotfiles"
+        if [[ -L "${local_link}" && "$(readlink "${local_link}")" == "${LOCAL_DOTFILES}" ]]; then
+            ok "${local_link}"
+        elif [[ ! -e "${local_link}" && ! -L "${local_link}" ]]; then
+            act "link ${local_link} -> ${LOCAL_DOTFILES}"
+            run ln -s -- "${LOCAL_DOTFILES}" "${local_link}"
+        elif (( FORCE )) && [[ -L "${local_link}" ]]; then
+            act "relink ${local_link}"
+            run rm -- "${local_link}"
+            run ln -s -- "${LOCAL_DOTFILES}" "${local_link}"
+        else
+            warn "${local_link} exists and is not our symlink"
+        fi
+    fi
+
+    local kind src tgt abs_src abs_tgt
+    while IFS=$'\t' read -r kind src tgt; do
+        case "${kind}" in
+            link)
+                abs_src="${DOTFILES_SRC}/${src}"
+                abs_tgt="${HOME}/${tgt}"
+                if [[ "${MODE}" == uninstall ]]; then
+                    uninstall_link "${abs_src}" "${abs_tgt}"
+                else
+                    install_link "${abs_src}" "${abs_tgt}"
+                fi
+                ;;
+            husk)
+                [[ "${MODE}" == uninstall ]] || install_husk "${tgt}"
+                ;;
+            *) die "unknown manifest kind: ${kind}" ;;
+        esac
+    done < <(read_manifest "${host_os}")
+
+    printf '\nsummary: ok=%d changed=%d conflict=%d\n' "${N_OK}" "${N_CHANGED}" "${N_CONFLICT}"
+
+    case "${MODE}" in
+        check)
+            (( N_CHANGED == 0 && N_CONFLICT == 0 )) || exit 1
+            ;;
+        dry-run)
+            printf 'dry-run: re-run with --apply to make changes\n'
+            ;;
+        apply|uninstall)
+            (( N_CONFLICT == 0 )) || exit 1
+            ;;
+    esac
+}
+
+main "$@"

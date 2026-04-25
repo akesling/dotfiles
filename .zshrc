@@ -65,3 +65,10 @@ source ~/dotfiles/fzf_zsh.sh
 ###############################################################################
 
 export HOMEBREW_NO_AUTO_UPDATE=1
+
+###############################################################################
+# Per-machine overrides #######################################################
+###############################################################################
+
+# Husk created by setup.sh; safe to source even when empty.
+[[ -r ~/.local/dotfiles/.zshrc ]] && source ~/.local/dotfiles/.zshrc
