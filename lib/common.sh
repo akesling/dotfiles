@@ -34,3 +34,34 @@ read_manifest() {
         printf '%s\t%s\t%s\n' "${kind}" "${src}" "${tgt}"
     done < "${MANIFEST}"
 }
+
+# Detect the active package manager. Echoes one of: brew, apt, dnf, pacman, unknown.
+detect_pm() {
+    if command -v brew    >/dev/null 2>&1; then echo brew;    return; fi
+    if command -v apt-get >/dev/null 2>&1; then echo apt;     return; fi
+    if command -v dnf     >/dev/null 2>&1; then echo dnf;     return; fi
+    if command -v pacman  >/dev/null 2>&1; then echo pacman;  return; fi
+    echo unknown
+}
+
+# Read packages.txt and emit "command\tcategory\tpkg" rows for the given PM.
+# Rows whose package column is "-" for the active PM are skipped (the tool is
+# either built-in or not packaged for that OS). Caller must set PACKAGES.
+read_packages() {
+    local pm=$1 line cmd cat brew_p apt_p dnf_p pacman_p pkg
+    [[ -f "${PACKAGES}" ]] || die "packages list not found: ${PACKAGES}"
+    while IFS= read -r line || [[ -n "${line}" ]]; do
+        line="${line%%#*}"
+        [[ -z "${line// }" ]] && continue
+        IFS=$' \t' read -r cmd cat brew_p apt_p dnf_p pacman_p <<<"${line}"
+        case "${pm}" in
+            brew)   pkg="${brew_p}" ;;
+            apt)    pkg="${apt_p}" ;;
+            dnf)    pkg="${dnf_p}" ;;
+            pacman) pkg="${pacman_p}" ;;
+            *)      pkg="-" ;;
+        esac
+        [[ "${pkg}" == "-" ]] && continue
+        printf '%s\t%s\t%s\n' "${cmd}" "${cat}" "${pkg}"
+    done < "${PACKAGES}"
+}

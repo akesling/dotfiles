@@ -8,26 +8,36 @@ declarative manifest.
 ```sh
 git clone <this-repo> ~/dotfiles
 cd ~/dotfiles
+./packages.sh --bootstrap-brew  # install Homebrew under ~/.local/homebrew (no sudo)
+./packages.sh --check     # report missing commands (exit 1 if any required missing)
+./packages.sh --install   # install missing required packages via brew/apt/dnf/pacman
+./packages.sh --install-all  # required + optional
 ./setup.sh                # dry-run: shows what would change
 ./setup.sh --apply        # actually link
 ./setup.sh --check        # exit 0 iff everything is linked correctly (CI-friendly)
 ./setup.sh --uninstall    # remove only the symlinks this script created
 ./vim-plugins.sh          # bootstrap Vundle + run :PluginInstall (one-time)
-./doctor.sh               # health check: required commands, broken links, rc syntax
+./doctor.sh               # health check: commands, links, rc syntax, editor smoke tests
 ```
 
 Conflicting real files are moved to `~/.dotfiles-backup/<timestamp>/` before
 linking. Conflicting symlinks abort with a warning unless `--force` is passed.
+
+On a fresh macOS box with no package manager, `packages.sh` automatically
+bootstraps Homebrew under `~/.local/homebrew` using the "untar anywhere"
+install from <https://docs.brew.sh/Installation> so `brew` never needs sudo.
 
 ## Layout
 
 | Path                | Purpose                                                    |
 | ------------------- | ---------------------------------------------------------- |
 | `manifest.txt`      | Declares every link (`<os> link <src> <target>`) and husk. |
-| `setup.sh`          | Idempotent installer. `shellcheck`-clean.                  |
-| `doctor.sh`         | Deeper health check (commands, links, rc syntax).          |
+| `packages.txt`      | Expected commands and their package names per OS / PM.     |
+| `setup.sh`          | Idempotent linkfarm installer.                             |
+| `packages.sh`       | Verifies / installs commands declared in `packages.txt`.   |
+| `doctor.sh`         | Deeper health check (commands, links, rc syntax, editors). |
 | `vim-plugins.sh`    | Bootstraps Vundle and runs `:PluginInstall`.               |
-| `lib/common.sh`     | Shared helpers (sourced by the three scripts above).       |
+| `lib/common.sh`     | Shared helpers (sourced by the scripts above).             |
 | `local_dotfiles/`   | Per-machine overrides. Git-ignored. Never commit.          |
 | `.vimrc`, `.zshrc`, `nvim/`, … | The tracked configs themselves.                 |
 

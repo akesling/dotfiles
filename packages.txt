@@ -1,0 +1,32 @@
+# Expected commands and the package that provides them on each OS.
+#
+# Format: <command> <category> <brew> <apt> <dnf> <pacman>
+#   command:   binary that must end up on PATH (this is what doctor.sh checks)
+#   category:  required | optional
+#   <pkgmgr>:  package name for that package manager
+#              "-" means: not packaged / not needed (built-in to base system)
+#
+# Add a row for every tool the dotfiles assume. Keep this list short and
+# honest; if a "required" tool isn't actually required, mark it optional.
+
+# command       category   brew         apt         dnf            pacman
+
+# --- required ---
+git             required   git          git         git            git
+zsh             required   zsh          zsh         zsh            zsh
+bash            required   bash         bash        bash           bash
+vim             required   vim          vim         vim-enhanced   vim
+nvim            required   neovim       neovim      neovim         neovim
+
+# --- optional ---
+tmux            optional   tmux         tmux        tmux           tmux
+fzf             optional   fzf          fzf         fzf            fzf
+rg              optional   ripgrep      ripgrep     ripgrep        ripgrep
+fd              optional   fd           fd-find     fd-find        fd
+shellcheck      optional   shellcheck   shellcheck  ShellCheck     shellcheck
+
+# --- macOS-only optional (GNU coreutils for solarized dircolors) ---
+# gls / gdircolors are both provided by the brew "coreutils" package; on Linux
+# they're built in as `ls` / `dircolors`, so the apt/dnf/pacman columns are "-".
+gls             optional   coreutils    -           -              -
+gdircolors      optional   coreutils    -           -              -

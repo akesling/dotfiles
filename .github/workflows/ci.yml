@@ -15,7 +15,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y shellcheck
-          shellcheck setup.sh doctor.sh vim-plugins.sh lib/common.sh
+          shellcheck -x setup.sh doctor.sh vim-plugins.sh packages.sh lib/common.sh
 
   install:
     name: install (${{ matrix.os }})
@@ -27,16 +27,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: install deps (linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y zsh tmux vim neovim fzf
-
-      - name: install deps (macos)
-        if: runner.os == 'macOS'
-        run: |
-          brew install --quiet zsh tmux vim neovim fzf coreutils || true
+      - name: install expected commands
+        run: ./packages.sh --install-all
 
       - name: print versions
         run: |
@@ -53,7 +45,11 @@ jobs:
           bash -n setup.sh
           bash -n doctor.sh
           bash -n vim-plugins.sh
+          bash -n packages.sh
           zsh -n .zshrc
+
+      - name: packages.sh --check (post-install)
+        run: ./packages.sh --check
 
       - name: prepare clean HOME
         run: |

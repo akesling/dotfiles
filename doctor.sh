@@ -15,6 +15,7 @@ IFS=$'\n\t'
 DOTFILES_SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOCAL_DOTFILES="${DOTFILES_SRC}/local_dotfiles"
 MANIFEST="${DOTFILES_SRC}/manifest.txt"
+PACKAGES="${DOTFILES_SRC}/packages.txt"
 
 # shellcheck source=lib/common.sh
 source "${DOTFILES_SRC}/lib/common.sh"
@@ -28,24 +29,28 @@ main() {
     [[ "${host_os}" != unknown ]] || die "unsupported OS: $(uname -s)"
     printf 'doctor: os=%s home=%s\n\n' "${host_os}" "${HOME}"
 
-    printf '== required commands ==\n'
-    local cmd
-    for cmd in git nvim vim zsh bash sed awk; do
-        if command -v "${cmd}" >/dev/null 2>&1; then
-            ok "${cmd}: $(command -v "${cmd}")"
-        else
-            fail "missing: ${cmd}"
-        fi
-    done
-
-    printf '\n== optional commands ==\n'
-    for cmd in tmux fzf gls gdircolors brew rg fd; do
-        if command -v "${cmd}" >/dev/null 2>&1; then
-            ok "${cmd}: $(command -v "${cmd}")"
-        else
-            note "missing optional: ${cmd}"
-        fi
-    done
+    # Source-of-truth for the command list is packages.txt. Filter to whichever
+    # package manager is active so we don't, e.g., flag `gls` as missing on a
+    # Linux box where it isn't packaged.
+    local pm
+    pm=$(detect_pm)
+    if [[ "${pm}" == unknown ]]; then
+        note "no supported package manager detected; skipping command checks"
+    else
+        printf '== commands (pm: %s) ==\n' "${pm}"
+        local cmd cat pkg
+        while IFS=$'\t' read -r cmd cat pkg; do
+            if command -v "${cmd}" >/dev/null 2>&1; then
+                ok "${cmd}: $(command -v "${cmd}")"
+            else
+                if [[ "${cat}" == required ]]; then
+                    fail "missing required: ${cmd} (pkg: ${pkg})"
+                else
+                    note "missing optional: ${cmd} (pkg: ${pkg})"
+                fi
+            fi
+        done < <(read_packages "${pm}")
+    fi
 
     printf '\n== manifest links ==\n'
     local kind src tgt abs_src abs_tgt cur
