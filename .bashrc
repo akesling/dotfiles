@@ -5,10 +5,20 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
+###############################################################################
+# History #####################################################################
+###############################################################################
+
 export HISTCONTROL=ignoreboth
 export HISTSIZE=2000000
+export HISTFILESIZE=2000000
+shopt -s histappend 2>/dev/null
 
-alias exit='history -a && exit'
+###############################################################################
+# Aliases #####################################################################
+###############################################################################
+
+alias vim=nvim
 
 # Solarized dark colors for ls/completion. Prefer GNU ls + dircolors when
 # available (macOS: `brew install coreutils` provides gls/gdircolors), and
@@ -26,26 +36,48 @@ fi
 # Fix tmux color issues (force 256 colors)
 alias tmux='tmux -2'
 
-export GIT_PS1_SHOWDIRTYSTATE=1
+# Calendar with today highlighted - http://www.shell-fu.org/lister.php?id=210
+alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#/g'\'') /"'
 
-# User specific aliases and functions
+###############################################################################
+# Prompt ######################################################################
+###############################################################################
+
+export GIT_PS1_SHOWDIRTYSTATE=1
 export PS1="\n\[\e[1;32m\]\H \[\e[37m\]| \[\e[31m\]\w \[\e[37m\]| \[\e[1;35m\]\t \[\e[4;35m\]\d\n\[\e[0;32m\]\u\[\e[1;37m\] ( \[\e[1;36m\]\! : \#\[\e[1;37m\] ) \[\e[0;39m\]"
 
-### Used for blog post to clean up username/hostname. Saving in case of need ##
-#export PS1="\n   \[\e[1;32m\]herein \[\e[37m\]| \[\e[31m\]\w \[\e[37m\]| \[\e[1;35m\]\t \[\e[4;35m\]\d\n\[\e[0;32m\]   echoet\[\e[1;37m\] ( \[\e[1;36m\]\! : \#\[\e[1;37m\] ) \$(__git_ps1 '%s ')\$ \[\e[0;39m\]"
+###############################################################################
+# Editor ######################################################################
+###############################################################################
 
-export UAEDITOR=nvim
 export EDITOR=nvim
 export VISUAL=nvim
 
-#calendar with today highlighted - http://www.shell-fu.org/lister.php?id=210
-alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#/g'\'') /"'
+###############################################################################
+# PATH ########################################################################
+###############################################################################
 
-# Add npm installed binaries to path
-PATH=$PATH:~/Devel/nodejs/npm/bin
+# Homebrew is intentionally installed under $HOME/.local/homebrew (rather than
+# the default /opt/homebrew or /usr/local) so that `brew` never requires sudo
+# to install, upgrade, or uninstall packages.
+PATH="${PATH}:${HOME}/.local/homebrew/bin"
+PATH="${PATH}:${HOME}/.local/homebrew/opt/libpq/bin"
+PATH="${PATH}:/Applications/Docker.app/Contents/Resources/bin"
+PATH="${PATH}:${HOME}/.yarn/bin:${HOME}/.config/yarn/global/node_modules/.bin"
+export PATH
 
-source ~/.local/dotfiles/.bashrc
+###############################################################################
+# Tooling #####################################################################
+###############################################################################
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export HOMEBREW_NO_AUTO_UPDATE=1
 
+# FZF
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+###############################################################################
+# Per-machine overrides #######################################################
+###############################################################################
+
+# Husk created by setup.sh; safe to source even when empty.
+[ -r ~/.local/dotfiles/.bashrc ] && source ~/.local/dotfiles/.bashrc

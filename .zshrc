@@ -2,8 +2,9 @@
 # Basic Configuration #########################################################
 ###############################################################################
 
-export SAVEHIST=HISTSIZE=2000000
-
+export HISTFILE=~/.zsh_history
+export HISTSIZE=2000000
+export SAVEHIST=2000000
 
 setopt EXTENDED_HISTORY          # Write the history file in the
                                  # ":start:elapsed;command" format.
@@ -32,6 +33,9 @@ PROMPT='
 # PATH ########################################################################
 ###############################################################################
 
+# Homebrew is intentionally installed under $HOME/.local/homebrew (rather than
+# the default /opt/homebrew or /usr/local) so that `brew` never requires sudo
+# to install, upgrade, or uninstall packages.
 PATH="${PATH}:${HOME}/.local/homebrew/bin"
 PATH="${PATH}:/Applications/Docker.app/Contents/Resources/bin"
 PATH="${PATH}:/Users/alex/.local/homebrew/opt/libpq/bin"
@@ -72,8 +76,8 @@ bindkey -v  # Vim insert mode config
 # Extensions ##################################################################
 ###############################################################################
 
-# FZF
-source ~/dotfiles/fzf_zsh.sh
+# FZF (linked into HOME by setup.sh)
+[[ -r ~/.fzf_zsh.sh ]] && source ~/.fzf_zsh.sh
 
 ###############################################################################
 # Tooling #####################################################################

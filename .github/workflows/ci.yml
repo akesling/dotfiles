@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+          shellcheck setup.sh doctor.sh vim-plugins.sh lib/common.sh
+
+  install:
+    name: install (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install deps (linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh tmux vim neovim fzf
+
+      - name: install deps (macos)
+        if: runner.os == 'macOS'
+        run: |
+          brew install --quiet zsh tmux vim neovim fzf coreutils || true
+
+      - name: print versions
+        run: |
+          uname -a
+          bash --version | head -1
+          zsh --version
+          vim --version | head -1
+          nvim --version | head -1
+          git --version
+
+      - name: shell syntax
+        run: |
+          bash -n .bashrc
+          bash -n setup.sh
+          bash -n doctor.sh
+          bash -n vim-plugins.sh
+          zsh -n .zshrc
+
+      - name: prepare clean HOME
+        run: |
+          TEST_HOME="$(mktemp -d)"
+          echo "TEST_HOME=${TEST_HOME}" >> "${GITHUB_ENV}"
+          echo "HOME for test: ${TEST_HOME}"
+
+      - name: setup.sh --apply
+        run: HOME="${TEST_HOME}" ./setup.sh --apply
+
+      - name: setup.sh --check
+        run: HOME="${TEST_HOME}" ./setup.sh --check
+
+      - name: vim-plugins.sh (bootstrap Vundle + :PluginInstall)
+        run: HOME="${TEST_HOME}" ./vim-plugins.sh
+
+      - name: doctor.sh
+        run: HOME="${TEST_HOME}" ./doctor.sh
+
+      - name: source .bashrc in a fresh bash
+        run: HOME="${TEST_HOME}" bash -c 'source ~/.bashrc && echo OK'
+
+      - name: source .zshrc in a fresh zsh
+        run: HOME="${TEST_HOME}" zsh -c 'source ~/.zshrc && echo OK'
+
+      - name: vim loads .vimrc
+        run: HOME="${TEST_HOME}" vim -es -u "${TEST_HOME}/.vimrc" +qall
+
+      - name: nvim loads init.lua (lazy.nvim sync)
+        run: HOME="${TEST_HOME}" nvim --headless "+Lazy! sync" +qall
+
+      - name: setup.sh --uninstall is clean
+        run: |
+          HOME="${TEST_HOME}" ./setup.sh --uninstall
+          # Re-run --check; expect exit 1 because nothing's linked anymore.
+          set +e
+          HOME="${TEST_HOME}" ./setup.sh --check
+          rc=$?
+          set -e
+          if [ "$rc" -eq 0 ]; then
+            echo "expected --check to fail after --uninstall, but it passed" >&2
+            exit 1
+          fi

@@ -10,6 +10,10 @@
 # --check       exit 0 if everything is already linked correctly, else 1
 # --uninstall   remove only symlinks this script created (pointing into the repo)
 # --force       overwrite conflicting symlinks (still backs up real files)
+#
+# Companion scripts:
+#   doctor.sh        deeper health check (required commands, broken symlinks, rc syntax)
+#   vim-plugins.sh   bootstrap Vundle and run :PluginInstall
 
 set -euo pipefail
 IFS=$'\n\t'
@@ -19,50 +23,20 @@ LOCAL_DOTFILES="${DOTFILES_SRC}/local_dotfiles"
 MANIFEST="${DOTFILES_SRC}/manifest.txt"
 BACKUP_DIR="${HOME}/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 
+# shellcheck source=lib/common.sh
+source "${DOTFILES_SRC}/lib/common.sh"
+
 MODE="dry-run"
 FORCE=0
 
-# Tallies for --check / final summary.
-N_OK=0
-N_CHANGED=0
-N_CONFLICT=0
-
 usage() {
-    sed -n '2,13p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+    sed -n '2,16p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
 }
-
-die() { printf 'error: %s\n' "$*" >&2; exit 2; }
-
-ok()   { printf '  \033[32mok\033[0m       %s\n' "$*"; N_OK=$(( N_OK + 1 )); }
-act()  { printf '  \033[33mchange\033[0m   %s\n' "$*"; N_CHANGED=$(( N_CHANGED + 1 )); }
-warn() { printf '  \033[31mconflict\033[0m %s\n' "$*"; N_CONFLICT=$(( N_CONFLICT + 1 )); }
 
 run() {
     if [[ "${MODE}" == "apply" || "${MODE}" == "uninstall" ]]; then
         "$@"
     fi
-}
-
-detect_os() {
-    case "$(uname -s)" in
-        Darwin) echo macos ;;
-        Linux)  echo linux ;;
-        *)      echo unknown ;;
-    esac
-}
-
-# Read manifest, filter by os, emit "kind\tsource\ttarget" rows.
-read_manifest() {
-    local host_os=$1 line os kind src tgt
-    [[ -f "${MANIFEST}" ]] || die "manifest not found: ${MANIFEST}"
-    while IFS= read -r line || [[ -n "${line}" ]]; do
-        line="${line%%#*}"
-        [[ -z "${line// }" ]] && continue
-        # Re-enable whitespace splitting just for this read.
-        IFS=$' \t' read -r os kind src tgt <<<"${line}"
-        [[ "${os}" == "all" || "${os}" == "${host_os}" ]] || continue
-        printf '%s\t%s\t%s\n' "${kind}" "${src}" "${tgt}"
-    done < "${MANIFEST}"
 }
 
 # install_link <abs_source> <abs_target>

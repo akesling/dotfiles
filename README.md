@@ -8,10 +8,12 @@ declarative manifest.
 ```sh
 git clone <this-repo> ~/dotfiles
 cd ~/dotfiles
-./setup.sh             # dry-run: shows what would change
-./setup.sh --apply     # actually link
-./setup.sh --check     # exit 0 iff everything is linked correctly (CI-friendly)
-./setup.sh --uninstall # remove only the symlinks this script created
+./setup.sh                # dry-run: shows what would change
+./setup.sh --apply        # actually link
+./setup.sh --check        # exit 0 iff everything is linked correctly (CI-friendly)
+./setup.sh --uninstall    # remove only the symlinks this script created
+./vim-plugins.sh          # bootstrap Vundle + run :PluginInstall (one-time)
+./doctor.sh               # health check: required commands, broken links, rc syntax
 ```
 
 Conflicting real files are moved to `~/.dotfiles-backup/<timestamp>/` before
@@ -19,21 +21,23 @@ linking. Conflicting symlinks abort with a warning unless `--force` is passed.
 
 ## Layout
 
-| Path             | Purpose                                                    |
-| ---------------- | ---------------------------------------------------------- |
-| `manifest.txt`   | Declares every link (`<os> link <src> <target>`) and husk. |
-| `setup.sh`       | Idempotent installer. `shellcheck`-clean.                  |
-| `local_dotfiles/`| Per-machine overrides. Git-ignored. Never commit.          |
-| `.vimrc`, `.zshrc`, `nvim/`, … | The tracked configs themselves.              |
+| Path                | Purpose                                                    |
+| ------------------- | ---------------------------------------------------------- |
+| `manifest.txt`      | Declares every link (`<os> link <src> <target>`) and husk. |
+| `setup.sh`          | Idempotent installer. `shellcheck`-clean.                  |
+| `doctor.sh`         | Deeper health check (commands, links, rc syntax).          |
+| `vim-plugins.sh`    | Bootstraps Vundle and runs `:PluginInstall`.               |
+| `lib/common.sh`     | Shared helpers (sourced by the three scripts above).       |
+| `local_dotfiles/`   | Per-machine overrides. Git-ignored. Never commit.          |
+| `.vimrc`, `.zshrc`, `nvim/`, … | The tracked configs themselves.                 |
 
 ## Per-machine overrides (the "husk" pattern)
 
-Tracked rc files end with a `source` of a matching file under
-`~/.local/dotfiles/` (a symlink to `local_dotfiles/`). Examples:
+Tracked rc files end with a guarded `source` of a matching file under
+`~/.local/dotfiles/` (a symlink to `local_dotfiles/`), e.g.:
 
-```
-.vimrc:395   source ~/.local/dotfiles/.vimrc
-.bashrc:37   source ~/.local/dotfiles/.bashrc
+```sh
+[ -r ~/.local/dotfiles/.bashrc ] && source ~/.local/dotfiles/.bashrc
 ```
 
 `setup.sh` `touch`es those files as empty husks so the `source` is a no-op on a

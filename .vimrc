@@ -104,7 +104,10 @@ set autoread             " if the file has been changed outside vim and not
 set history=1000         " remember more commands and search history
 set undolevels=1000      " use many muchos levels of undo
 set noerrorbells         " don't beep
-set pastetoggle=<F2>     " toggle paste mode
+" pastetoggle was removed in Vim 9.0; guard for older builds.
+if exists('+pastetoggle')
+    set pastetoggle=<F2> " toggle paste mode
+endif
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
