@@ -6,6 +6,7 @@
 #   setup.sh [--apply | --check | --uninstall] [--force] [-h|--help]
 #
 # Default mode is dry-run: prints what would happen, changes nothing.
+# --dry-run     explicit no-op alias (the default); prints planned actions
 # --apply       perform the changes
 # --check       exit 0 if everything is already linked correctly, else 1
 # --uninstall   remove only symlinks this script created (pointing into the repo)
@@ -99,6 +100,7 @@ main() {
         case "$1" in
             --apply)     MODE=apply ;;
             --check)     MODE=check ;;
+            --dry-run)   MODE=dry-run ;;
             --uninstall) MODE=uninstall ;;
             --force)     FORCE=1 ;;
             -h|--help)   usage; exit 0 ;;

@@ -1,8 +1,5 @@
 [core]
 	editor = nvim
-[user]
-	email = alex.kesling@gmail.com
-	name = A K
 [filter "lfs"]
 	required = true
 	clean = git-lfs clean -- %f
@@ -16,3 +13,7 @@
 	conflictstyle = diff3
 [diff]
 	algorithm = histogram
+# Per-machine identity (user.name / user.email) and any other per-host overrides.
+# The husk is created empty by setup.sh; populate it on each machine.
+[include]
+	path = ~/.local/dotfiles/.gitconfig

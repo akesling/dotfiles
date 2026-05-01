@@ -1,0 +1,4 @@
+PROMPT=<
+%F{10}%M %F{white}| %F{red}%d %F{white}| %F{13}%U%*%f %F{13}%D{%Y-%m-%d}%u%f
+%F{green}%n%f%F{white} ( %F{yellow}${_zsh_history_count}%f%F{white} ) %#%f >
+RPROMPT=<${${KEYMAP/vicmd/N}/(main|viins)/I}>

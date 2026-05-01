@@ -1,83 +1,58 @@
-# .bashrc
+# .bashrc — interactive bash startup.
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
-###############################################################################
-# History #####################################################################
-###############################################################################
+# Resolve repo root (handle .bashrc being a symlink into the dotfiles repo).
+_dotfiles_src="$(cd -P -- "$(dirname -- "$(readlink "${HOME}/.bashrc" 2>/dev/null || echo "${HOME}/.bashrc")")" && pwd)"
 
-export HISTCONTROL=ignoreboth
-export HISTSIZE=2000000
-export HISTFILESIZE=2000000
-shopt -s histappend 2>/dev/null
+# === Shared shell layer ===
+# PATH, env, aliases, dircolors, fzf integration.
+# Reads _dotfiles_src to add bin/ to PATH.
+# shellcheck source=lib/sh/common.sh
+[ -r "${_dotfiles_src}/lib/sh/common.sh" ] && . "${_dotfiles_src}/lib/sh/common.sh"
+unset _dotfiles_src
 
-###############################################################################
-# Aliases #####################################################################
-###############################################################################
+# === History ===
 
-alias vim=nvim
+export HISTSIZE=1000000
+export HISTFILESIZE=1000000
+export HISTCONTROL=ignoreboth:erasedups
+export HISTTIMEFORMAT='%F %T '
+PROMPT_COMMAND='history -a'
 
-# Solarized dark colors for ls/completion. Prefer GNU ls + dircolors when
-# available (macOS: `brew install coreutils` provides gls/gdircolors), and
-# fall back to BSD ls -G otherwise.
-if command -v gdircolors >/dev/null 2>&1; then
-    eval "$(gdircolors ~/.dircolors)"
-    alias ls='gls --color=auto'
-elif command -v dircolors >/dev/null 2>&1; then
-    eval "$(dircolors ~/.dircolors)"
-    alias ls='ls --color=auto'
-else
-    alias ls='ls -G'
+# === Shell options ===
+
+# Always available on bash 3.2+.
+shopt -s histappend cmdhist checkwinsize nocaseglob cdspell
+
+# Bash 4+ only.
+if (( BASH_VERSINFO[0] >= 4 )); then
+    shopt -s globstar autocd dirspell
 fi
 
-# Fix tmux color issues (force 256 colors)
-alias tmux='tmux -2'
+# === Vi mode ===
+# Mirrors ~/.inputrc; explicit here for safety in subshells that ignore inputrc.
+set -o vi
 
-# Calendar with today highlighted - http://www.shell-fu.org/lister.php?id=210
-alias tcal='cal | sed "s/^/ /;s/$/ /;s/ $(date +%e) / $(date +%e | sed '\''s/./#/g'\'') /"'
+# === Completion ===
+# Source bash-completion@2 from Homebrew when present.
+if command -v brew >/dev/null 2>&1; then
+    _brew_prefix="$(brew --prefix 2>/dev/null)"
+    if [[ -r "${_brew_prefix}/etc/profile.d/bash_completion.sh" ]]; then
+        # shellcheck disable=SC1091
+        . "${_brew_prefix}/etc/profile.d/bash_completion.sh"
+    fi
+    unset _brew_prefix
+fi
 
-###############################################################################
-# Prompt ######################################################################
-###############################################################################
-
+# === Prompt ===
+# Native bash escapes only — zero subshells per redraw.
 export GIT_PS1_SHOWDIRTYSTATE=1
 export PS1="\n\[\e[1;32m\]\H \[\e[37m\]| \[\e[31m\]\w \[\e[37m\]| \[\e[1;35m\]\t \[\e[4;35m\]\d\n\[\e[0;32m\]\u\[\e[1;37m\] ( \[\e[1;36m\]\! : \#\[\e[1;37m\] ) \[\e[0;39m\]"
 
-###############################################################################
-# Editor ######################################################################
-###############################################################################
-
-export EDITOR=nvim
-export VISUAL=nvim
-
-###############################################################################
-# PATH ########################################################################
-###############################################################################
-
-# Homebrew is intentionally installed under $HOME/.local/homebrew (rather than
-# the default /opt/homebrew or /usr/local) so that `brew` never requires sudo
-# to install, upgrade, or uninstall packages.
-PATH="${PATH}:${HOME}/.local/homebrew/bin"
-PATH="${PATH}:${HOME}/.local/homebrew/opt/libpq/bin"
-PATH="${PATH}:/Applications/Docker.app/Contents/Resources/bin"
-PATH="${PATH}:${HOME}/.yarn/bin:${HOME}/.config/yarn/global/node_modules/.bin"
-export PATH
-
-###############################################################################
-# Tooling #####################################################################
-###############################################################################
-
-export HOMEBREW_NO_AUTO_UPDATE=1
-
-# FZF
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-###############################################################################
-# Per-machine overrides #######################################################
-###############################################################################
-
+# === Per-machine overrides ===
 # Husk created by setup.sh; safe to source even when empty.
 [ -r ~/.local/dotfiles/.bashrc ] && source ~/.local/dotfiles/.bashrc

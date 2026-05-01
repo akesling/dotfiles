@@ -23,6 +23,8 @@ tmux            optional   tmux         tmux        tmux           tmux
 fzf             optional   fzf          fzf         fzf            fzf
 rg              optional   ripgrep      ripgrep     ripgrep        ripgrep
 fd              optional   fd           fd-find     fd-find        fd
+bat             optional   bat          bat         bat            bat
+eza             optional   eza          eza         eza            eza
 shellcheck      optional   shellcheck   shellcheck  ShellCheck     shellcheck
 
 # --- macOS-only optional (GNU coreutils for solarized dircolors) ---

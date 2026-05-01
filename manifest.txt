@@ -18,16 +18,16 @@ all   link  .gitconfig     .gitconfig
 all   link  .gitignore     .gitignore
 all   link  .tmux.conf     .tmux.conf
 all   link  .ideavimrc     .ideavimrc
-all   link  .mailcap       .mailcap
 all   link  nvim           .config/nvim
 all   link  dircolors/dircolors.ansi-dark  .dircolors
-all   link  fzf_zsh.sh     .fzf_zsh.sh
 
-linux link  .xinitrc       .xinitrc
-linux link  .Xmodmap       .Xmodmap
-linux link  .Xresources    .Xresources
+linux link  linux/.xinitrc       .xinitrc
+linux link  linux/.Xmodmap       .Xmodmap
+linux link  linux/.Xresources    .Xresources
 
 # Per-machine override husks (sourced from the matching rc file).
 all   husk  -              .bashrc
 all   husk  -              .zshrc
 all   husk  -              .vimrc
+all   husk  -              init.lua
+all   husk  -              .gitconfig

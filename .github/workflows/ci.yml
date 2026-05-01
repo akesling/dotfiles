@@ -7,18 +7,70 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint:
+  shellcheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: shellcheck
+      - name: install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - name: shellcheck *.sh
         run: |
-          sudo apt-get update
-          sudo apt-get install -y shellcheck
-          shellcheck -x setup.sh doctor.sh vim-plugins.sh packages.sh lib/common.sh
+          shellcheck -x \
+            setup.sh \
+            doctor.sh \
+            vim-plugins.sh \
+            packages.sh \
+            lib/common.sh \
+            lib/sh/common.sh \
+            tests/snapshot.sh
 
-  install:
-    name: install (${{ matrix.os }})
+  vint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: install vint
+        run: pip install vim-vint
+      - name: vint
+        run: vint .vimrc vim/shared/common.vim
+
+  luacheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: install luacheck
+        run: sudo apt-get update && sudo apt-get install -y luarocks && sudo luarocks install luacheck
+      - name: luacheck nvim
+        run: luacheck nvim --globals vim --no-max-line-length
+
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: install zsh
+        run: sudo apt-get update && sudo apt-get install -y zsh
+      - name: link rc files into HOME
+        run: |
+          ./setup.sh --apply
+      - name: prompt snapshot tests
+        run: ./tests/snapshot.sh
+
+  dry-run:
+    name: setup --dry-run (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup.sh --dry-run
+        run: ./setup.sh --dry-run
+
+  integration:
+    name: integration (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false

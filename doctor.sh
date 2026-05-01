@@ -109,6 +109,11 @@ main() {
             fail ".zshrc syntax error"
         fi
     fi
+    if [[ -r "${HOME}/.inputrc" ]]; then
+        ok ".inputrc readable"
+    elif [[ -e "${HOME}/.inputrc" ]]; then
+        fail ".inputrc exists but is not readable"
+    fi
 
     printf '\n== editor smoke tests ==\n'
     if [[ -f "${HOME}/.vimrc" ]] && command -v vim >/dev/null 2>&1; then
@@ -130,8 +135,79 @@ main() {
         fi
     fi
 
+    printf '\n== performance budgets ==\n'
+    perf_check
+
     printf '\ndoctor: issues=%d\n' "${ISSUES}"
     (( ISSUES == 0 ))
+}
+
+# perf_check: measure cold-start times for bash, zsh, vim, and nvim against
+# documented budgets. Each measurement is appended to ~/.local/dotfiles/perf.log
+# as CSV (timestamp,tool,ms) so regressions become visible over time.
+perf_check() {
+    local perf_log="${HOME}/.local/dotfiles/perf.log"
+    mkdir -p -- "$(dirname "${perf_log}")"
+    [[ -f "${perf_log}" ]] || printf 'timestamp,tool,ms\n' > "${perf_log}"
+
+    perf_one bash 150 bash -ic exit
+    perf_one zsh  150 zsh  -ic exit
+
+    # Prefer the system vim binary so we don't accidentally measure nvim via
+    # an alias or PATH precedence.
+    if [[ -x /usr/bin/vim ]]; then
+        perf_one vim 100 /usr/bin/vim -es -u "${HOME}/.vimrc" -c qa
+    elif command -v vim >/dev/null 2>&1; then
+        perf_one vim 100 vim -es -u "${HOME}/.vimrc" -c qa
+    else
+        note "vim not on PATH, skipping perf check"
+    fi
+
+    perf_one nvim 100 nvim --headless +qa
+}
+
+# perf_one <label> <budget_ms> <cmd...>
+# Runs the command three times, takes the best wall-time, appends the result
+# to the perf log, and fails if it exceeds the budget.
+perf_one() {
+    local label=$1 budget=$2; shift 2
+    local first_arg=$1
+    if ! command -v "${first_arg}" >/dev/null 2>&1 && [[ ! -x "${first_arg}" ]]; then
+        note "${label}: ${first_arg} unavailable, skipping"
+        return
+    fi
+
+    local best_ms=999999 ms _
+    for _ in 1 2 3; do
+        ms=$(measure_ms "$@") || { fail "${label}: command failed"; return; }
+        (( ms < best_ms )) && best_ms=${ms}
+    done
+
+    local perf_log="${HOME}/.local/dotfiles/perf.log"
+    local ts
+    ts="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    printf '%s,%s,%d\n' "${ts}" "${label}" "${best_ms}" >> "${perf_log}"
+
+    if (( best_ms <= budget )); then
+        ok "${label}: ${best_ms}ms (budget ${budget}ms)"
+    else
+        fail "${label}: ${best_ms}ms exceeds ${budget}ms budget"
+    fi
+}
+
+# measure_ms <cmd...>: print elapsed wall time as integer milliseconds.
+# Uses perl Time::HiRes for portability (macOS `date` lacks %N).
+measure_ms() {
+    perl -MTime::HiRes=time -e '
+        open(my $out, ">&", STDOUT) or die;
+        open(STDIN,  "<", "/dev/null") or die;
+        open(STDOUT, ">", "/dev/null") or die;
+        open(STDERR, ">", "/dev/null") or die;
+        my $t0 = time();
+        my $ec = system(@ARGV);
+        printf $out "%d\n", int((time() - $t0) * 1000);
+        exit($ec == 0 ? 0 : 1);
+    ' -- "$@"
 }
 
 main "$@"
