@@ -88,10 +88,9 @@ nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 " === Colors ===
-
-set background=dark
-silent! colorscheme solarized
-let g:solarized_termtrans=1     " Respect terminal transparency.
+" Each native layer owns its own background+colorscheme load. Touching either
+" of those here causes nvim's solarized.nvim to re-derive its palette after
+" lazy.nvim already initialized it, which clobbers some treesitter links.
 
 " === Autocommands ===
 

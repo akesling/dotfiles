@@ -60,6 +60,11 @@ execute 'source ' . s:dotfiles_src . '/vim/shared/common.vim'
 
 " === Vim-only options ===
 
+" Solarized via the Vundle-managed altercation/vim-colors-solarized.
+set background=dark
+let g:solarized_termtrans=1     " Respect terminal transparency.
+silent! colorscheme solarized
+
 " Don't wake up system with blinking cursor.
 set guicursor+=a:blinkon0
 
