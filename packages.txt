@@ -19,13 +19,15 @@ vim             required   vim          vim         vim-enhanced   vim
 nvim            required   neovim       neovim      neovim         neovim
 
 # --- optional ---
-tmux            optional   tmux         tmux        tmux           tmux
-fzf             optional   fzf          fzf         fzf            fzf
-rg              optional   ripgrep      ripgrep     ripgrep        ripgrep
-fd              optional   fd           fd-find     fd-find        fd
-bat             optional   bat          bat         bat            bat
-eza             optional   eza          eza         eza            eza
-shellcheck      optional   shellcheck   shellcheck  ShellCheck     shellcheck
+tmux            optional   tmux             tmux             tmux             tmux
+fzf             optional   fzf              fzf              fzf              fzf
+rg              optional   ripgrep          ripgrep          ripgrep          ripgrep
+fd              optional   fd               fd-find          fd-find          fd
+bat             optional   bat              bat              bat              bat
+eza             optional   eza              eza              eza              eza
+shellcheck      optional   shellcheck       shellcheck       ShellCheck       shellcheck
+# Required by nvim-treesitter to compile parsers (`:TSInstall`/`:TSUpdate`).
+tree-sitter     optional   tree-sitter-cli  tree-sitter-cli  tree-sitter-cli  tree-sitter-cli
 
 # --- macOS-only optional (GNU coreutils for solarized dircolors) ---
 # gls / gdircolors are both provided by the brew "coreutils" package; on Linux
